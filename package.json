@@ -1,0 +1,24 @@
+{
+  "name": "v-idle",
+  "version": "0.1.0",
+  "description": "A Vue.js plugin to detect idle/non-active users",
+  "main": "src/index",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malekim/v-idle.git"
+  },
+  "keywords": [
+    "vue",
+    "vuejs",
+    "plugin"
+  ],
+  "author": "Lukasz Malek <dev@malek.im>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/malekim/v-idle/issues"
+  },
+  "homepage": "https://github.com/malekim/v-idle#readme"
+}
