@@ -168,6 +168,18 @@ Create a timer for 300 seconds (5 minutes) with loop, remind 10 and 15 second be
   }
 ```
 
+## Tests
+
+To run tests type:
+```bash
+npm run test
+```
+
+To run particular test type:
+```bash
+npm run test -- -t "test_name"
+```
+
 ## License
 
 `v-idle` uses the MIT License (MIT). Please see the [license file](https://github.com/malekim/v-idle/blob/master/LICENSE) for more information.
