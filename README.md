@@ -1,4 +1,4 @@
-# v-idle
+# v-idle [![codecov](https://codecov.io/gh/malekim/v-idle/branch/master/graph/badge.svg)](https://codecov.io/gh/malekim/v-idle)
 
 ## Getting started
 
@@ -166,6 +166,18 @@ Create a timer for 300 seconds (5 minutes) with loop, remind 10 and 15 second be
       alert(time);
     }
   }
+```
+
+## Tests
+
+To run tests type:
+```bash
+npm run test
+```
+
+To run particular test type:
+```bash
+npm run test -- -t "test_name"
 ```
 
 ## License
