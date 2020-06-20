@@ -4,8 +4,9 @@
   "description": "A Vue.js plugin to detect idle/non-active users",
   "main": "build/vidle.min.js",
   "scripts": {
-    "test": "echo \\\"Error: no test specified\\\" && exit 1",
-    "build": "rollup -c"
+    "lint": "eslint --ext .ts --ignore-path .gitignore .",
+    "test": "jest",
+    "build": "rollup -c rollup.config.ts"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,25 @@
   },
   "homepage": "https://github.com/malekim/v-idle#readme",
   "devDependencies": {
-    "@babel/core": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "rollup": "^1.10.0",
-    "rollup-plugin-babel": "^4.3.2"
+    "@rollup/plugin-typescript": "^4.1.2",
+    "@types/jest": "^26.0.0",
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "@typescript-eslint/parser": "^3.3.0",
+    "@vue/test-utils": "^1.0.3",
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "install": "^0.13.0",
+    "jest": "^26.0.1",
+    "jest-date-mock": "^1.0.8",
+    "npm": "^6.14.5",
+    "prettier": "^2.0.5",
+    "rollup": "^2.15.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-uglify": "^6.0.4",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.9.5",
+    "vue": "^2.6.11",
+    "vue-template-compiler": "^2.6.11"
   }
 }
