@@ -11,7 +11,6 @@ export default {
     format: 'cjs',
     name: 'vidle',
   },
-  external: ['@vue/composition-api'],
   plugins: [
     commonjs({
       sourceMap: true,
