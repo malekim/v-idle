@@ -139,7 +139,7 @@ Default: 60 * 5
 Should be in seconds, default value is 60 * 5 seconds, so 5 minutes.
 
 ```html
-<v-idle :duration="360" />
+<v-idle :duration="300" />
 ```
 
 ## Example
