@@ -23,7 +23,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage/coverage-final.json
     - name: Slack Notification
-      uses: homoluctus/slatify@master
+      uses: lazy-actions/slatify@v3.0.0
       if: always()
       with:
         type: ${{ job.status }}
