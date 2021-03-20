@@ -1,6 +1,6 @@
-# v-idle [![codecov](https://codecov.io/gh/malekim/v-idle/branch/master/graph/badge.svg)](https://codecov.io/gh/malekim/v-idle)
+# v-idle
 
-## Getting started
+[![codecov](https://codecov.io/gh/malekim/v-idle/branch/master/graph/badge.svg)](https://codecov.io/gh/malekim/v-idle)
 
 V-idle is a Vue.js plugin to detect idle/non-active users.
 
