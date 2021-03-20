@@ -1,0 +1,16 @@
+base: '/v-idle/'
+title: 'malekim/v-idle'
+dest: 'docs'
+description: 'V-idle is a Vue.js plugin to detect idle/non-active users.'
+themeConfig:
+  repo: 'malekim/v-idle'
+  sidebar:
+    '/': [
+      {
+        title: 'Introduction',
+        collapsable: false,
+        children: [
+          '',
+        ]
+      }
+    ]
