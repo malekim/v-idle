@@ -6,7 +6,7 @@ V-idle is a Vue.js plugin to detect idle/non-active users.
 
 ## Installation
 
-THe plugin can be installed by npm or yarn. Alternatively it can be used through jsdelivr CDN.
+The plugin can be installed by npm or yarn. Alternatively it can be used through jsdelivr CDN.
 
 ### NPM
 
@@ -20,7 +20,7 @@ npm install v-idle --save
 yarn add v-idle
 ```
 
-### Jsdelivr
+### Jsdelivr CDN
 
 Latest version of the plugin is available here:
 [https://cdn.jsdelivr.net/npm/v-idle@latest/build/vidle.min.js](https://cdn.jsdelivr.net/npm/v-idle@latest/build/vidle.min.js)
