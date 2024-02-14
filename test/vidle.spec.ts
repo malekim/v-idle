@@ -71,7 +71,7 @@ describe('Basic vidle', () => {
     await component.$nextTick
     advanceBy(60000)
     component.setDisplay()
-    jest.runTimersToTime(60000)
+    jest.advanceTimersByTime(60000)
     await component.$nextTick
     expect(component.$data.display).toBe('00:00')
     advanceBy(5000)
@@ -98,7 +98,7 @@ describe('Test countdown', () => {
     await component.$nextTick
     advanceBy(60000)
     component.setDisplay()
-    jest.runTimersToTime(60000)
+    jest.advanceTimersByTime(60000)
     await component.$nextTick
     expect(component.$data.display).toBe('00:00')
     advanceBy(5000)
@@ -124,7 +124,7 @@ describe('Test countdown', () => {
     await component.$nextTick
     advanceBy(60000)
     component.setDisplay()
-    jest.runTimersToTime(60000)
+    jest.advanceTimersByTime(60000)
     await component.$nextTick
     expect(component.$data.display).toBe('01:01')
     advanceBy(6000)
