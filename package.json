@@ -4,6 +4,7 @@
   "description": "A Vue.js plugin to detect idle/non-active users",
   "main": "build/vidle.min.js",
   "scripts": {
+    "example": "parcel example/index.html",
     "lint": "eslint --ext .ts --ignore-path .gitignore .",
     "test": "jest",
     "build": "rollup -c rollup.config.mjs"
@@ -37,6 +38,7 @@
     "jest": "26.6.3",
     "jest-date-mock": "1.0.8",
     "npm": "10.4.0",
+    "parcel": "^2.11.0",
     "prettier": "2.2.1",
     "rollup": "4.10.0",
     "serialize-javascript": "6.0.2",
