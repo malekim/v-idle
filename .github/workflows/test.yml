@@ -23,10 +23,8 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage/coverage-final.json
     - name: Slack Notification
-      uses: lazy-actions/slatify@v3.0.0
-      if: always()
-      with:
-        type: ${{ job.status }}
-        job_name: 'Github'
-        channel: '#github'
-        url: ${{ secrets.SLACK_WEBHOOK }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_CHANNEL: github
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
