@@ -99,6 +99,18 @@ Executes when the timer reaches time in seconds before 00:00
   :reminders="[5, 10, 20, 60]" />
 ```
 
+### @refresh
+
+Type: Function
+
+Default: none
+
+Executes when activity is detected
+
+```html
+<v-idle @refresh="onrefresh" />
+```
+
 ### reminders
 
 Type: Array
