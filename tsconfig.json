@@ -3,11 +3,13 @@
     "module": "es6",
     "moduleResolution": "node",
     "noImplicitAny": true,
+    "allowJs": true,
     "target": "es5",
     "strict": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true
   },
   "types": ["@types/jest"],
-  "include": ["src/**/*", "test"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*", "test", "rollup.config.ts"],
+  "exclude": ["node_modules", "build"]
 }

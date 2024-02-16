@@ -1,10 +1,24 @@
 import { createLocalVue, mount } from '@vue/test-utils'
-import { advanceBy, clear } from 'jest-date-mock'
+import * as sinon from '@sinonjs/fake-timers'
 import Vidle from '../src/components/vidle'
 
 const localVue = createLocalVue()
 
-jest.useFakeTimers()
+let clock: sinon.InstalledClock
+
+const advanceClock = async (ms: number) => clock.tickAsync(ms)
+
+beforeAll(() => {
+  clock = sinon.install()
+})
+
+beforeEach(() => {
+  clock.reset()
+})
+
+afterAll(() => {
+  clock.uninstall()
+})
 
 describe('Basic vidle', () => {
   test('Is a Vue instance', () => {
@@ -21,18 +35,17 @@ describe('Basic vidle', () => {
         duration: 660,
       },
     })
-    const component: any = wrapper.vm
-    jest.advanceTimersByTime(1000)
-    await wrapper.vm.$nextTick
-    expect(component.$data.display).toBe('11:00')
+    const component = wrapper.vm
+    await advanceClock(1000)
+    expect(component.$data.display).toBe('10:59')
   })
 
-  test('Test unmount', () => {
+  test('Test unmount', async () => {
     const wrapper = mount(Vidle, {
       localVue,
     })
-    const component: any = wrapper.vm
-    jest.advanceTimersByTime(1000)
+    const component = wrapper.vm
+    await advanceClock(1000)
     component.$nextTick
     // should call onBeforeUnmount() then
     wrapper.destroy()
@@ -46,45 +59,17 @@ describe('Basic vidle', () => {
         duration: 60,
       },
     })
-    const component: any = wrapper.vm
+    const component = wrapper.vm
     // wait until display will be shown
-    jest.advanceTimersByTime(1000)
-    await component.$nextTick
-    advanceBy(6000)
-    component.setDisplay()
+    await advanceClock(6000)
     // 60 second minus 6 seconds
     expect(component.$data.display).toBe('00:54')
-
-    clear()
-  })
-
-  test('Test idle', async () => {
-    const wrapper = mount(Vidle, {
-      localVue,
-      propsData: {
-        // set duration for 60 seconds
-        duration: 60,
-      },
-    })
-    const component: any = wrapper.vm
-    jest.advanceTimersByTime(1000)
-    await component.$nextTick
-    advanceBy(60000)
-    component.setDisplay()
-    jest.advanceTimersByTime(60000)
-    await component.$nextTick
-    expect(component.$data.display).toBe('00:00')
-    advanceBy(5000)
-    component.setDisplay()
-    expect(component.$data.display).toBe('00:00')
-    expect(wrapper.emitted().idle).toBeTruthy()
-
-    clear()
   })
 })
 
 describe('Test countdown', () => {
-  test('Basic countdown', async () => {
+  test('Basic countdown with idle', async () => {
+    const idleMock = jest.fn()
     const wrapper = mount(Vidle, {
       // important to test mousemove
       localVue,
@@ -92,21 +77,18 @@ describe('Test countdown', () => {
         // set duration for 60 seconds
         duration: 60,
       },
+      listeners: {
+        idle: idleMock,
+      },
     })
-    const component: any = wrapper.vm
-    jest.advanceTimersByTime(1000)
-    await component.$nextTick
-    advanceBy(60000)
+    const component = wrapper.vm
     component.setDisplay()
-    jest.advanceTimersByTime(60000)
-    await component.$nextTick
+    await advanceClock(60000)
     expect(component.$data.display).toBe('00:00')
-    advanceBy(5000)
-    component.setDisplay()
+    await advanceClock(5000)
     expect(component.$data.display).toBe('00:00')
+    expect(idleMock).toHaveBeenCalled()
     expect(wrapper.emitted().idle).toBeTruthy()
-
-    clear()
   })
 
   test('Countdown with loop', async () => {
@@ -119,25 +101,22 @@ describe('Test countdown', () => {
         loop: true,
       },
     })
-    const component: any = wrapper.vm
-    jest.advanceTimersByTime(1000)
-    await component.$nextTick
-    advanceBy(60000)
-    component.setDisplay()
-    jest.advanceTimersByTime(60000)
-    await component.$nextTick
-    expect(component.$data.display).toBe('01:01')
-    advanceBy(6000)
-    component.setDisplay()
+    const component = wrapper.vm
+    await advanceClock(60000)
+    expect(component.$data.display).toBe('00:00')
+    await advanceClock(500)
+    expect(component.$data.diff).toBe(0)
+    await advanceClock(500)
+    expect(component.$data.display).toBe('01:00')
+    await advanceClock(5000)
     expect(component.$data.display).toBe('00:55')
     expect(wrapper.emitted().idle).toBeTruthy()
-
-    clear()
   })
 })
 
 describe('Test reminders', () => {
   test('Basic reminder', async () => {
+    const spyUpdate = jest.fn()
     const wrapper = mount(Vidle, {
       localVue,
       propsData: {
@@ -146,23 +125,17 @@ describe('Test reminders', () => {
         // first reminder, when 50 second last
         reminders: [49, 50],
       },
+      listeners: {
+        remind: spyUpdate,
+      },
     })
-    const component: any = wrapper.vm
-    const spyUpdate = jest.spyOn(component, 'remind')
-    jest.advanceTimersByTime(1000)
-    await component.$nextTick
-    advanceBy(9000)
-    component.setDisplay()
+    await advanceClock(9000)
     expect(spyUpdate).toHaveBeenCalledTimes(0)
-    advanceBy(1000)
-    component.setDisplay()
+    await advanceClock(1000)
     expect(spyUpdate).toHaveBeenCalledTimes(1)
-    advanceBy(1000)
-    component.setDisplay()
+    await advanceClock(1000)
     expect(spyUpdate).toHaveBeenCalledTimes(2)
     expect(wrapper.emitted().remind).toBeTruthy()
-
-    clear()
   })
 })
 
@@ -170,24 +143,22 @@ describe('Test events', () => {
   test('Mousemove', async () => {
     const wrapper = mount(Vidle, {
       // important to test mousemove
-      attachToDocument: true,
+      attachTo: document.body,
       localVue,
       propsData: {
         // set duration for 60 seconds
         duration: 60,
       },
     })
-    const component: any = wrapper.vm
-    jest.advanceTimersByTime(1000)
-    await component.$nextTick
-    advanceBy(9000)
+    const component = wrapper.vm
+    await advanceClock(9000)
     component.setDisplay()
     expect(component.$data.display).toBe('00:51')
     wrapper.trigger('mousemove')
+    component.$nextTick
     component.setDisplay()
     // after mousemove display should be resetted
     expect(component.$data.display).toBe('01:00')
-
-    clear()
+    expect(wrapper.emitted().refresh).toBeTruthy()
   })
 })

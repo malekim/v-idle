@@ -7,7 +7,7 @@ const Vidle = Vue.extend({
       {
         class: 'v-idle',
       },
-      this.display
+      this.display,
     )
   },
   props: {
@@ -111,7 +111,7 @@ const Vidle = Vue.extend({
       this.counter = window.setInterval(this.countdown, 1000)
     },
     clearTimer() {
-      this.$emit("refresh")
+      this.$emit('refresh')
       clearInterval(this.timer)
       clearInterval(this.counter)
       this.setDisplay()
