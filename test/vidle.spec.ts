@@ -152,9 +152,8 @@ describe('Test events', () => {
     })
     const component = wrapper.vm
     await advanceClock(9000)
-    component.setDisplay()
     expect(component.$data.display).toBe('00:51')
-    wrapper.trigger('mousemove')
+    await wrapper.trigger('mousemove')
     component.$nextTick
     component.setDisplay()
     // after mousemove display should be resetted
