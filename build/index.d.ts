@@ -17,7 +17,7 @@ declare const Vidle: vue_types_vue.ExtendedVue<Vue__default<Record<string, any>,
     idle(): void;
     remind(): void;
     setTimer(): void;
-    clearTimer(): void;
+    clearTimer(event: Event): void;
 }, unknown, {
     duration: number;
     events: string[];

@@ -103,12 +103,31 @@ Executes when the timer reaches time in seconds before 00:00
 
 Type: Function
 
+Argument: object with type of event (for example 'mousemove') and key (if timer was refreshed with keyboard)
+
 Default: none
 
 Executes when activity is detected
 
 ```html
 <v-idle @refresh="onrefresh" />
+```
+
+```javascript
+  methods: {
+    onrefresh(event: {
+      type: string
+      key: string | undefined
+    }) {
+      console.info(event.type)
+      console.info(event.key)
+      if (event.type === 'keydown') {
+        if (event.key !== undefined && event.key === 'Escape') {
+          console.error('Escape clicked')
+        }
+      }
+    },
+  }
 ```
 
 ### reminders

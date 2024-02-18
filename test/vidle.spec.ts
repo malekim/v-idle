@@ -160,4 +160,34 @@ describe('Test events', () => {
     expect(component.$data.display).toBe('01:00')
     expect(wrapper.emitted().refresh).toBeTruthy()
   })
+
+  test('Keydown', async () => {
+    const wrapper = mount(Vidle, {
+      // important to test mousemove
+      attachTo: document.body,
+      localVue,
+      propsData: {
+        // set duration for 60 seconds
+        duration: 60,
+        events: ['keydown'],
+      },
+    })
+    const component = wrapper.vm
+    await advanceClock(1000)
+    component.$nextTick
+    await wrapper.trigger('keydown', {
+      key: 'Escape',
+    })
+    component.setDisplay()
+    const keypressEvent = wrapper.emitted().refresh
+    expect(keypressEvent).toBeTruthy()
+    if (keypressEvent) {
+      expect(keypressEvent[0]).toEqual([
+        {
+          type: 'keydown',
+          key: 'Escape',
+        },
+      ])
+    }
+  })
 })
