@@ -110,8 +110,15 @@ const Vidle = Vue.extend({
       this.timer = window.setInterval(this.idle, this.duration * 1000)
       this.counter = window.setInterval(this.countdown, 1000)
     },
-    clearTimer() {
-      this.$emit('refresh')
+    clearTimer(event: Event) {
+      const clearEvent: {
+        type: string
+        key: string | undefined
+      } = {
+        type: event.type,
+        key: event instanceof KeyboardEvent ? event.key : undefined,
+      }
+      this.$emit('refresh', clearEvent)
       clearInterval(this.timer)
       clearInterval(this.counter)
       this.setDisplay()
