@@ -16,7 +16,8 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
   ],
   plugins: ['prettier'],
-  // add your custom rules here
+  ignorePatterns: ['build/'],
+  // custom rules here
   rules: {
     camelcase: ['off'],
     '@typescript-eslint/camelcase': ['off'],
