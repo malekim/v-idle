@@ -1,26 +1,19 @@
-import Vue from 'vue'
+import { createApp, h } from 'vue-demi'
 import Vidle from './'
 
-Vue.use(Vidle)
-
-new Vue({
-  el: '#app',
-  render: (createElement) => {
-    return createElement('v-idle', {
-      props: {
-        duration: 10,
-        loop: true,
-      },
-      on: {
-        idle: () => {
-          console.error('idle')
-        },
-      },
-    })
-  },
-  methods: {
-    onidle() {
-      alert('idle')
-    },
+const app = createApp({
+  setup() {
+    return () =>
+      h('div', {}, [
+        h(Vidle, {
+          duration: 10,
+          loop: false,
+          onIdle: () => {
+            console.error('idle')
+          },
+        }),
+      ])
   },
 })
+
+app.mount('#app')

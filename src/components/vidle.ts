@@ -1,15 +1,16 @@
-import Vue, { CreateElement, PropType, VNode } from 'vue'
+import {
+  h,
+  nextTick,
+  ref,
+  defineComponent,
+  type PropType,
+  type Ref,
+  onMounted,
+  onBeforeUnmount,
+} from 'vue-demi'
 
-const Vidle = Vue.extend({
-  render(createElement: CreateElement): VNode {
-    return createElement(
-      'div',
-      {
-        class: 'v-idle',
-      },
-      this.display,
-    )
-  },
+export default defineComponent({
+  emits: ['idle', 'remind', 'refresh'],
   props: {
     duration: {
       type: Number,
@@ -35,82 +36,68 @@ const Vidle = Vue.extend({
       default: 0,
     },
   },
-  data(): {
-    display: string
-    timer: number | undefined
-    start: number
-    counter: number | undefined
-    diff: number
-    minutes: string
-    seconds: string
-  } {
-    return {
-      display: '',
-      timer: undefined,
-      start: 0,
-      counter: undefined,
-      diff: 0,
-      minutes: '',
-      seconds: '',
-    }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.start = Date.now()
-      this.setDisplay()
-      this.$nextTick(() => {
-        this.setTimer()
-        for (let i = this.events.length - 1; i >= 0; i -= 1) {
-          window.addEventListener(this.events[i], this.clearTimer)
+  setup: (props, { emit }) => {
+    const display: Ref<string> = ref('ed')
+    const timer: Ref<number | undefined> = ref(undefined)
+    const start: Ref<number> = ref(0)
+    const counter: Ref<number | undefined> = ref(undefined)
+    const diff: Ref<number> = ref(0)
+    const minutes: Ref<string> = ref('')
+    const seconds: Ref<string> = ref('')
+
+    const shouldRemind = () => {
+      if (props.reminders.length > 0) {
+        if (props.reminders.includes(diff.value)) {
+          remind()
         }
-      })
-    }, this.wait * 1000)
-  },
-  methods: {
-    setDisplay() {
+      }
+    }
+
+    const setDisplay = () => {
       // seconds since start
-      this.diff = this.duration - (((Date.now() - this.start) / 1000) | 0)
-      if (this.diff < 0 && !this.loop) {
+      diff.value = props.duration - (((Date.now() - start.value) / 1000) | 0)
+
+      if (diff.value < 0 && !props.loop) {
+        clearInterval(timer.value)
+        clearInterval(counter.value)
         return
       }
-      this.shouldRemind()
+      shouldRemind()
 
       // bitwise OR to handle parseInt
-      const minute = (this.diff / 60) | 0
-      const second = this.diff % 60 | 0
+      const minute = (diff.value / 60) | 0
+      const second = diff.value % 60 | 0
 
-      this.minutes = `${minute < 10 ? '0' + minute : minute}`
-      this.seconds = `${second < 10 ? '0' + second : second}`
+      minutes.value = `${minute < 10 ? '0' + minute : minute}`
+      seconds.value = `${second < 10 ? '0' + second : second}`
 
-      this.display = `${this.minutes}:${this.seconds}`
-    },
-    shouldRemind() {
-      if (this.reminders.length > 0) {
-        if (this.reminders.includes(this.diff)) {
-          this.remind()
-        }
-      }
-    },
-    countdown() {
-      this.setDisplay()
+      display.value = `${minutes.value}:${seconds.value}`
+    }
 
-      if (this.diff <= 0 && this.loop) {
+    const countdown = () => {
+      setDisplay()
+
+      if (diff.value <= 0 && props.loop) {
         // add second to start at the full duration
         // for instance 05:00, not 04:59
-        this.start = Date.now() + 1000
+        start.value = Date.now() + 1000
       }
-    },
-    idle() {
-      this.$emit('idle')
-    },
-    remind() {
-      this.$emit('remind', this.diff)
-    },
-    setTimer() {
-      this.timer = window.setInterval(this.idle, this.duration * 1000)
-      this.counter = window.setInterval(this.countdown, 1000)
-    },
-    clearTimer(event: Event) {
+    }
+
+    const idle = () => {
+      emit('idle')
+    }
+
+    const remind = () => {
+      emit('remind')
+    }
+
+    const setTimer = () => {
+      timer.value = window.setInterval(idle, props.duration * 1000)
+      counter.value = window.setInterval(countdown, 1000)
+    }
+
+    const clearTimer = (event: Event) => {
       const clearEvent: {
         type: string
         key: string | undefined
@@ -118,22 +105,47 @@ const Vidle = Vue.extend({
         type: event.type,
         key: event instanceof KeyboardEvent ? event.key : undefined,
       }
-      this.$emit('refresh', clearEvent)
-      clearInterval(this.timer)
-      clearInterval(this.counter)
-      this.setDisplay()
-      this.start = Date.now()
-      this.diff = 0
-      this.setTimer()
-    },
-  },
-  beforeDestroy() {
-    clearInterval(this.timer)
-    clearInterval(this.counter)
-    for (let i = this.events.length - 1; i >= 0; i -= 1) {
-      window.removeEventListener(this.events[i], this.clearTimer)
+      emit('refresh', clearEvent)
+      clearInterval(timer.value)
+      clearInterval(counter.value)
+      setDisplay()
+      start.value = Date.now()
+      diff.value = 0
+      setTimer()
+    }
+
+    onMounted(() => {
+      setTimeout(() => {
+        start.value = Date.now()
+        setDisplay()
+        nextTick(() => {
+          setTimer()
+          for (let i = props.events.length - 1; i >= 0; i -= 1) {
+            window.addEventListener(props.events[i], clearTimer)
+          }
+        })
+      }, props.wait * 1000)
+    })
+
+    onBeforeUnmount(() => {
+      clearInterval(timer.value)
+      clearInterval(counter.value)
+      for (let i = props.events.length - 1; i >= 0; i -= 1) {
+        window.removeEventListener(props.events[i], clearTimer)
+      }
+    })
+
+    return {
+      display,
     }
   },
+  render() {
+    return h(
+      'div',
+      {
+        class: 'v-idle',
+      },
+      this.display,
+    )
+  },
 })
-
-export default Vidle

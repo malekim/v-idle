@@ -1,7 +1,6 @@
 // rollup.config.ts
 import { RollupOptions } from 'rollup'
 import typescript from '@rollup/plugin-typescript'
-import commonjs from '@rollup/plugin-commonjs'
 import terser from '@rollup/plugin-terser'
 import { dts } from 'rollup-plugin-dts'
 
@@ -10,42 +9,51 @@ const tsconfig = JSON.parse(readFileSync('./tsconfig.json').toString())
 
 const config: RollupOptions[] = [
   {
-    external: ['vue'],
+    external: ['vue-demi'],
     input: 'src/index.ts',
-    output: {
-      file: 'build/vidle.min.js',
-      name: 'vidle',
-      format: 'es',
-    },
-    plugins: [
-      commonjs({
-        sourceMap: true,
-      }),
-      typescript({
-        ...tsconfig.compilerOptions,
-        include: '**/*.{js,ts}',
-      }),
-      terser(),
+    output: [
+      {
+        globals: {
+          'vue-demi': 'VueDemi',
+        },
+        file: 'build/vidle.esm.js',
+        format: 'esm',
+        sourcemap: true,
+      },
+      {
+        globals: {
+          'vue-demi': 'VueDemi',
+        },
+        file: 'build/vidle.esm.min.js',
+        format: 'esm',
+        plugins: [terser()],
+        sourcemap: true,
+      },
+      {
+        globals: {
+          'vue-demi': 'VueDemi',
+        },
+        file: 'build/vidle.umd.js',
+        format: 'umd',
+        name: 'v-idle',
+        sourcemap: true,
+      },
+      {
+        globals: {
+          'vue-demi': 'VueDemi',
+        },
+        file: 'build/vidle.umd.min.js',
+        format: 'umd',
+        name: 'v-idle',
+        plugins: [terser()],
+        sourcemap: true,
+      },
     ],
-  },
-  {
-    external: ['vue'],
-    input: 'src/index.ts',
-    output: {
-      file: 'build/vidle.min.cjs',
-      name: 'vidle',
-      exports: 'named',
-      format: 'cjs',
-    },
     plugins: [
-      commonjs({
-        sourceMap: true,
-      }),
       typescript({
         ...tsconfig.compilerOptions,
         include: '**/*.{js,ts}',
       }),
-      terser(),
     ],
   },
   {
@@ -54,7 +62,6 @@ const config: RollupOptions[] = [
     output: [
       {
         file: './build/index.d.ts',
-        format: 'es',
       },
     ],
     plugins: [dts()],

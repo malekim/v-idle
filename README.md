@@ -2,11 +2,11 @@
 
 [![codecov](https://codecov.io/gh/malekim/v-idle/branch/master/graph/badge.svg)](https://codecov.io/gh/malekim/v-idle)
 
-V-idle is a Vue.js plugin to detect idle/non-active users.
+V-idle is a universal Vue plugin compatible with Vue 2 and Vue 3 to detect idle/non-active users.
 
 ## Installation
 
-The plugin can be installed by npm or yarn. Alternatively it can be used through jsdelivr CDN.
+The plugin can be installed by npm, yarn or pnpm. Alternatively it can be used through jsdelivr CDN.
 
 ### NPM
 
@@ -20,45 +20,69 @@ npm install v-idle --save
 yarn add v-idle
 ```
 
+### PNPM
+
+```bash
+pnpm add v-idle
+```
+
 ### Jsdelivr CDN
 
 Latest version of the plugin is available here:
-[https://cdn.jsdelivr.net/npm/v-idle@latest/build/vidle.min.js](https://cdn.jsdelivr.net/npm/v-idle@latest/build/vidle.min.js)
+[https://cdn.jsdelivr.net/npm/v-idle@latest/build/vidle.umd.min.js](https://cdn.jsdelivr.net/npm/v-idle@latest/build/vidle.umd.min.js)
 
 ## Basic usage
 
-### Vue.js
+From 1.0.0 version the plugin supports vue 2 and vue 3 with the help of vue-demi package. 
+
+Starting with this version, the plugin no longer requires installation via `Vue.use()`. Simply import the 'Vidle' component where needed.
+
+### Vue 2.6+
+
+For Vue 2.6+, ensure you have the [`@vue/composition-api`](https://github.com/vuejs/composition-api) installed.
 
 ```javascript
 import Vue from 'vue'
-import Vidle from 'v-idle'
+import VueCompositionAPI from '@vue/composition-api'
 
-Vue.use(Vidle)
+Vue.use(VueCompositionAPI)
 ```
 
-Same for nuxt.js:
-
-### Nuxt.js
-
-Create vidle.js in plugins directory:
-
 ```javascript
-import Vue from 'vue'
+import { defineComponent } from '@vue/composition-api'
 import Vidle from 'v-idle'
 
-Vue.use(Vidle)
+export default defineComponent({
+  components: {
+    Vidle,
+  },
+})
 ```
 
-Then in nuxt.config.js:
+### Vue 2.7.2
 
 ```javascript
-module.exports = {
-  plugins: [
-    {
-      src: '~/plugins/vidle.js'
-    }
-  ]
-}
+import { defineComponent } from 'vue'
+import Vidle from 'v-idle'
+
+export default defineComponent({
+  components: {
+    Vidle,
+  },
+})
+```
+
+### Vue 3
+
+```javascript
+import { defineComponent } from 'vue'
+import Vidle from 'v-idle'
+
+export default defineComponent({
+  components: {
+    Vidle,
+  },
+})
 ```
 
 ## Component
@@ -66,7 +90,7 @@ module.exports = {
 Inside template use v-idle component:
 
 ```html
-<v-idle />
+<Vidle />
 ```
 
 It will show timer counting down from 05:00 by default.
@@ -223,6 +247,10 @@ To run particular test type:
 ```bash
 npm run test -- -t "test_name"
 ```
+
+## Roadmap
+
+- Add support for multi tabs
 
 ## License
 
