@@ -11,14 +11,13 @@ jobs:
     - name: Generate static vuepress files
       uses: actions/setup-node@v1
       with:
-        node-version: '16.x'
+        node-version: '18.x'
     - name: Install dependencies
-      run: npm install -D vuepress
+      run: npm install
     - name: Build vuepress
-      run: npx vuepress build
+      run: npm docs:build
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs
-
+        publish_dir: ./.vuepress/dist
