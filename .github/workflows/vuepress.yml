@@ -15,7 +15,7 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Build vuepress
-      run: npm docs:build
+      run: npm run docs:build
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
