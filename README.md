@@ -106,7 +106,7 @@ Default: none
 Executes when the timer reaches 00:00
 
 ```html
-<v-idle @idle="onidle" />
+<Vidle @idle="onidle" />
 ```
 
 ### @remind
@@ -118,7 +118,7 @@ Default: none
 Executes when the timer reaches time in seconds before 00:00
 
 ```html
-<v-idle
+<Vidle
   @remind="onremind"
   :reminders="[5, 10, 20, 60]" />
 ```
@@ -134,7 +134,7 @@ Default: none
 Executes when activity is detected
 
 ```html
-<v-idle @refresh="onrefresh" />
+<Vidle @refresh="onrefresh" />
 ```
 
 ```javascript
@@ -171,7 +171,7 @@ Default: false
 If set to true, timer will start execution again after 00:00
 
 ```html
-<v-idle :loop="true" />
+<Vidle :loop="true" />
 ```
 
 ### events
@@ -183,7 +183,7 @@ Default: ['mousemove', 'keypress']
 Each event will break countdown.
 
 ```html
-<v-idle :events="['mousemove']" />
+<Vidle :events="['mousemove']" />
 ```
 
 ### wait
@@ -195,7 +195,7 @@ Default: 0
 How many second to wait before starting countdown.
 
 ```html
-<v-idle :wait="100" />
+<Vidle :wait="100" />
 ```
 
 ### duration
@@ -207,7 +207,7 @@ Default: 60 * 5
 Should be in seconds, default value is 60 * 5 seconds, so 5 minutes.
 
 ```html
-<v-idle :duration="300" />
+<Vidle :duration="300" />
 ```
 
 ## Example
@@ -215,7 +215,7 @@ Should be in seconds, default value is 60 * 5 seconds, so 5 minutes.
 Create a timer for 300 seconds (5 minutes) with loop, remind 10 and 15 second before 00:00 with function onremind(), wait 5 seconds before showing user the timer, execute function onidle() when the timer reaches 00:00.
 
 ```html
-<v-idle
+<Vidle
   @idle="onidle"
   @remind="onremind"
   :loop="true"
