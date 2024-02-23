@@ -39,7 +39,7 @@ Starting with this version, the plugin no longer requires installation via `Vue.
 
 ### Vue 2.6+
 
-For Vue 2.6+, ensure you have the [`@vue/composition-api`](https://github.com/vuejs/composition-api) installed.
+For Vue 2.6+, ensure you have the [@vue/composition-api](https://github.com/vuejs/composition-api) installed.
 
 ```javascript
 import Vue from 'vue'

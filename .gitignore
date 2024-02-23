@@ -4,3 +4,5 @@ coverage/*
 .vscode/*
 .parcel-cache
 dist/
+.vuepress/
+docs/
