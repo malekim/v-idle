@@ -17,6 +17,8 @@ jobs:
       run: npm ci
     - name: 'Test'
       run: npm run test
+    - name: Build vuepress
+      run: npm run docs:build
     - name: Codecov
       uses: codecov/codecov-action@v1
       with:
