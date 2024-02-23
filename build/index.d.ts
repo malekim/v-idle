@@ -1,33 +1,60 @@
-import * as Vue from 'vue';
-import Vue__default, { VueConstructor } from 'vue';
-import * as vue_types_vue from 'vue/types/vue';
+import * as vue_demi from 'vue-demi';
+import { PropType, Ref } from 'vue-demi';
 
-declare const Vidle: vue_types_vue.ExtendedVue<Vue__default<Record<string, any>, Record<string, any>, never, never, (event: string, ...args: any[]) => Vue__default<Record<string, any>, Record<string, any>, never, never, any>>, {
-    display: string;
-    timer: number | undefined;
-    start: number;
-    counter: number | undefined;
-    diff: number;
-    minutes: string;
-    seconds: string;
+declare const _default: vue_demi.DefineComponent<{
+    duration: {
+        type: NumberConstructor;
+        default: number;
+    };
+    events: {
+        type: PropType<string[]>;
+        default: () => string[];
+    };
+    loop: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    reminders: {
+        type: PropType<number[]>;
+        default: () => number[];
+    };
+    wait: {
+        type: NumberConstructor;
+        default: number;
+    };
 }, {
-    setDisplay(): void;
-    shouldRemind(): void;
-    countdown(): void;
-    idle(): void;
-    remind(): void;
-    setTimer(): void;
-    clearTimer(event: Event): void;
-}, unknown, {
+    display: Ref<string>;
+}, unknown, {}, {}, vue_demi.ComponentOptionsMixin, vue_demi.ComponentOptionsMixin, ("idle" | "remind" | "refresh")[], "idle" | "remind" | "refresh", vue_demi.PublicProps, Readonly<vue_demi.ExtractPropTypes<{
+    duration: {
+        type: NumberConstructor;
+        default: number;
+    };
+    events: {
+        type: PropType<string[]>;
+        default: () => string[];
+    };
+    loop: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    reminders: {
+        type: PropType<number[]>;
+        default: () => number[];
+    };
+    wait: {
+        type: NumberConstructor;
+        default: number;
+    };
+}>> & {
+    onIdle?: ((...args: any[]) => any) | undefined;
+    onRemind?: ((...args: any[]) => any) | undefined;
+    onRefresh?: ((...args: any[]) => any) | undefined;
+}, {
     duration: number;
     events: string[];
     loop: boolean;
     reminders: number[];
     wait: number;
-}, {}, Vue.ComponentOptionsMixin, Vue.ComponentOptionsMixin>;
+}, {}>;
 
-declare const VidlePlugin: {
-    install(Vue: VueConstructor): void;
-};
-
-export { VidlePlugin as default, Vidle as vidle };
+export { _default as default };
