@@ -8,8 +8,7 @@ const test = defineComponent({
   setup: () => {
     const display = ref('test')
     const onClick = () => {
-      console.error('click')
-      display.value = 'eldoka'
+      display.value = 'clicked'
     }
 
     return () =>

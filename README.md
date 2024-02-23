@@ -174,6 +174,22 @@ If set to true, timer will start execution again after 00:00
 <Vidle :loop="true" />
 ```
 
+### syncKey
+
+Type: String
+
+Default: ''
+
+Setting `syncKey` to a non-empty string activates the propagation of the `refresh` event across all browser tabs and windows for component instances sharing the same `syncKey`.
+
+However, it's important to note that while the `refresh` event is synchronized, the internal timer associated with each component instance continues to count independently from the moment when the component is mounted in each tab or window. In fact, the first `refresh` event will reset timer in all the component instances.
+
+The synchronization feature is implemented using the browser's BroadcastChannel API, which is supported by all major browsers. For environments where BroadcastChannel is not supported, such as in some older browsers, consider integrating a polyfill to ensure compatibility.
+
+```html
+<Vidle syncKey="key-to-sync-between-tabs-and-windows" />
+```
+
 ### events
 
 Type: Array
@@ -250,7 +266,7 @@ npm run test -- -t "test_name"
 
 ## Roadmap
 
-- Add support for multi tabs
+- Add e2e tests
 
 ## License
 

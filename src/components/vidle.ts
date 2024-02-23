@@ -9,6 +9,11 @@ import {
   onBeforeUnmount,
 } from 'vue-demi'
 
+type ClearEvent = {
+  type: string
+  key: string | undefined
+}
+
 export default defineComponent({
   emits: ['idle', 'remind', 'refresh'],
   props: {
@@ -24,6 +29,10 @@ export default defineComponent({
     loop: {
       type: Boolean,
       default: false,
+    },
+    syncKey: {
+      type: String,
+      default: '',
     },
     reminders: {
       type: Array as PropType<number[]>,
@@ -44,6 +53,12 @@ export default defineComponent({
     const diff: Ref<number> = ref(0)
     const minutes: Ref<string> = ref('')
     const seconds: Ref<string> = ref('')
+    const broadcastChannel: Ref<BroadcastChannel | undefined> = ref(undefined)
+
+    const isSyncEnabled: boolean =
+      props.syncKey.length > 0 &&
+      typeof window !== 'undefined' &&
+      'BroadcastChannel' in window
 
     const shouldRemind = () => {
       if (props.reminders.length > 0) {
@@ -97,14 +112,19 @@ export default defineComponent({
       counter.value = window.setInterval(countdown, 1000)
     }
 
-    const clearTimer = (event: Event) => {
-      const clearEvent: {
-        type: string
-        key: string | undefined
-      } = {
+    const clearEvent = (event: Event) => {
+      const clearEvent: ClearEvent = {
         type: event.type,
         key: event instanceof KeyboardEvent ? event.key : undefined,
       }
+      clearTimer(clearEvent)
+      // clearEvent is called only in original tab when sync is on
+      if (isSyncEnabled) {
+        sendBroadcastEvent(clearEvent)
+      }
+    }
+
+    const clearTimer = (clearEvent: ClearEvent) => {
       emit('refresh', clearEvent)
       clearInterval(timer.value)
       clearInterval(counter.value)
@@ -114,14 +134,33 @@ export default defineComponent({
       setTimer()
     }
 
+    const sendBroadcastEvent = (event: ClearEvent) => {
+      if (broadcastChannel.value !== undefined) {
+        broadcastChannel.value.postMessage(event)
+      }
+    }
+
+    const setBroadcastChannel = () => {
+      broadcastChannel.value = new BroadcastChannel(props.syncKey)
+      broadcastChannel.value.addEventListener(
+        'message',
+        (event: MessageEvent<ClearEvent>) => {
+          clearTimer(event.data)
+        },
+      )
+    }
+
     onMounted(() => {
+      if (isSyncEnabled) {
+        setBroadcastChannel()
+      }
       setTimeout(() => {
         start.value = Date.now()
         setDisplay()
         nextTick(() => {
           setTimer()
           for (let i = props.events.length - 1; i >= 0; i -= 1) {
-            window.addEventListener(props.events[i], clearTimer)
+            window.addEventListener(props.events[i], clearEvent)
           }
         })
       }, props.wait * 1000)
@@ -131,7 +170,7 @@ export default defineComponent({
       clearInterval(timer.value)
       clearInterval(counter.value)
       for (let i = props.events.length - 1; i >= 0; i -= 1) {
-        window.removeEventListener(props.events[i], clearTimer)
+        window.removeEventListener(props.events[i], clearEvent)
       }
     })
 
