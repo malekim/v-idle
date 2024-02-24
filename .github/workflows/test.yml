@@ -9,7 +9,7 @@ jobs:
   test:
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
