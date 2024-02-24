@@ -53,7 +53,7 @@ test('Simulate synchronization', async ({ browser }) => {
 
   // wait two seconds until value higher than 00:03
   // will be visible
-  await firstTab.waitForSelector('div.v-idle:text("forced-error")', {
+  await firstTab.waitForSelector('div.v-idle:text("00:04")', {
     timeout: 2000,
   })
 
