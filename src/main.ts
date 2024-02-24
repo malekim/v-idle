@@ -9,10 +9,7 @@ const app = createApp({
           duration: 5,
           loop: false,
           syncKey: 'sync-key-test',
-          reminders: [
-            3,
-            1,
-          ],
+          reminders: [3, 1],
           onIdle: () => {
             console.error('idle_log')
           },
