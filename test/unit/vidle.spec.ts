@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import * as sinon from '@sinonjs/fake-timers'
-import Vidle from '../src/components/vidle'
+import Vidle from '../../src/components/vidle'
 
 let clock: sinon.InstalledClock
 
