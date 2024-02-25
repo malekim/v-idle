@@ -1,6 +1,6 @@
 {
   "name": "v-idle",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A universal Vue plugin compatible with Vue 2 and Vue 3 to detect idle/non-active users",
   "main": "./build/vidle.umd.js",
   "module": "./build/vidle.esm.js",
@@ -13,6 +13,7 @@
     "example-3.4.19": "rimraf .parcel-cache && vue-demi-switch 3 && parcel examples/vue-3.4.19/src/index.html",
     "lint": "eslint --ext .ts --ignore-path .gitignore .",
     "test": "jest",
+    "test:e2e": "playwright test",
     "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript"
   },
   "repository": {
@@ -37,6 +38,7 @@
   },
   "homepage": "https://github.com/malekim/v-idle#readme",
   "devDependencies": {
+    "@playwright/test": "1.41.2",
     "@rollup/plugin-terser": "0.4.4",
     "@rollup/plugin-typescript": "11.1.6",
     "@sinonjs/fake-timers": "11.2.2",

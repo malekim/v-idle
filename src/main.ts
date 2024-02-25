@@ -6,10 +6,15 @@ const app = createApp({
     return () =>
       h('div', {}, [
         h(Vidle, {
-          duration: 10,
+          duration: 5,
           loop: false,
+          syncKey: 'sync-key-test',
+          reminders: [3, 1],
           onIdle: () => {
-            console.error('idle')
+            console.error('idle_log')
+          },
+          onRemind: () => {
+            console.info('remind_log')
           },
         }),
       ])

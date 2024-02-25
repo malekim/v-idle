@@ -46,7 +46,7 @@ export default defineComponent({
     },
   },
   setup: (props, { emit }) => {
-    const display: Ref<string> = ref('ed')
+    const display: Ref<string> = ref('')
     const timer: Ref<number | undefined> = ref(undefined)
     const start: Ref<number> = ref(0)
     const counter: Ref<number | undefined> = ref(undefined)

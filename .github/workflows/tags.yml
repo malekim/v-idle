@@ -1,0 +1,29 @@
+name: "Tags"
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      # when the push doesn't contain a tag
+      - "!*"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Generate static vuepress files
+      uses: actions/setup-node@v1
+      with:
+        node-version: '18.x'
+    - name: set PACKAGE_VERSION
+      run: node -p -e '`PACKAGE_VERSION=${require("./package.json").version}`' >> $GITHUB_ENV
+    - name: package-version-to-git-tag
+      uses: pkgdeps/git-tag-action@v2
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_repo: ${{ github.repository }}
+        version: ${{ env.PACKAGE_VERSION }}
+        git_commit_sha: ${{ github.sha }}
+        git_tag_prefix: "v"

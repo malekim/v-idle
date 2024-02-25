@@ -266,7 +266,7 @@ npm run test -- -t "test_name"
 
 ## Roadmap
 
-- Add e2e tests
+- Add option to show seconds timer instead of clock timer
 
 ## License
 
