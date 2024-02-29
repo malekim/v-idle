@@ -1,6 +1,6 @@
 {
   "name": "v-idle",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A universal Vue plugin compatible with Vue 2 and Vue 3 to detect idle/non-active users",
   "main": "./build/vidle.umd.js",
   "module": "./build/vidle.esm.js",
