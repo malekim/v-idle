@@ -16,6 +16,10 @@ var Vidle = defineComponent({
             type: Boolean,
             default: false,
         },
+        syncKey: {
+            type: String,
+            default: '',
+        },
         reminders: {
             type: Array,
             // array of seconds
@@ -29,13 +33,17 @@ var Vidle = defineComponent({
     },
     setup: function (props, _a) {
         var emit = _a.emit;
-        var display = ref('ed');
+        var display = ref('');
         var timer = ref(undefined);
         var start = ref(0);
         var counter = ref(undefined);
         var diff = ref(0);
         var minutes = ref('');
         var seconds = ref('');
+        var broadcastChannel = ref(undefined);
+        var isSyncEnabled = props.syncKey.length > 0 &&
+            typeof window !== 'undefined' &&
+            'BroadcastChannel' in window;
         var shouldRemind = function () {
             if (props.reminders.length > 0) {
                 if (props.reminders.includes(diff.value)) {
@@ -77,11 +85,18 @@ var Vidle = defineComponent({
             timer.value = window.setInterval(idle, props.duration * 1000);
             counter.value = window.setInterval(countdown, 1000);
         };
-        var clearTimer = function (event) {
+        var clearEvent = function (event) {
             var clearEvent = {
                 type: event.type,
                 key: event instanceof KeyboardEvent ? event.key : undefined,
             };
+            clearTimer(clearEvent);
+            // clearEvent is called only in original tab when sync is on
+            if (isSyncEnabled) {
+                sendBroadcastEvent(clearEvent);
+            }
+        };
+        var clearTimer = function (clearEvent) {
             emit('refresh', clearEvent);
             clearInterval(timer.value);
             clearInterval(counter.value);
@@ -90,14 +105,28 @@ var Vidle = defineComponent({
             diff.value = 0;
             setTimer();
         };
+        var sendBroadcastEvent = function (event) {
+            if (broadcastChannel.value !== undefined) {
+                broadcastChannel.value.postMessage(event);
+            }
+        };
+        var setBroadcastChannel = function () {
+            broadcastChannel.value = new BroadcastChannel(props.syncKey);
+            broadcastChannel.value.addEventListener('message', function (event) {
+                clearTimer(event.data);
+            });
+        };
         onMounted(function () {
+            if (isSyncEnabled) {
+                setBroadcastChannel();
+            }
             setTimeout(function () {
                 start.value = Date.now();
                 setDisplay();
                 nextTick(function () {
                     setTimer();
                     for (var i = props.events.length - 1; i >= 0; i -= 1) {
-                        window.addEventListener(props.events[i], clearTimer);
+                        window.addEventListener(props.events[i], clearEvent);
                     }
                 });
             }, props.wait * 1000);
@@ -106,7 +135,7 @@ var Vidle = defineComponent({
             clearInterval(timer.value);
             clearInterval(counter.value);
             for (var i = props.events.length - 1; i >= 0; i -= 1) {
-                window.removeEventListener(props.events[i], clearTimer);
+                window.removeEventListener(props.events[i], clearEvent);
             }
         });
         return {

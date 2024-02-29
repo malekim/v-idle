@@ -14,6 +14,10 @@ declare const _default: vue_demi.DefineComponent<{
         type: BooleanConstructor;
         default: boolean;
     };
+    syncKey: {
+        type: StringConstructor;
+        default: string;
+    };
     reminders: {
         type: PropType<number[]>;
         default: () => number[];
@@ -37,6 +41,10 @@ declare const _default: vue_demi.DefineComponent<{
         type: BooleanConstructor;
         default: boolean;
     };
+    syncKey: {
+        type: StringConstructor;
+        default: string;
+    };
     reminders: {
         type: PropType<number[]>;
         default: () => number[];
@@ -53,6 +61,7 @@ declare const _default: vue_demi.DefineComponent<{
     duration: number;
     events: string[];
     loop: boolean;
+    syncKey: string;
     reminders: number[];
     wait: number;
 }, {}>;
