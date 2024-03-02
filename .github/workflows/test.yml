@@ -24,6 +24,11 @@ jobs:
       run: npm run test
     - name: Build vuepress
       run: npm run docs:build
+    - name: Build
+      run: npm run build
+    - name: Check git diff
+      run: |
+        git diff --exit-code || (echo "There are uncommitted changes" && exit 1)
     - name: Codecov
       uses: codecov/codecov-action@v1
       with:
